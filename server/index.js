@@ -2,14 +2,18 @@ const express = require('express');
 const expressSession = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const fs = require('fs')
-const morgan = require('morgan')
-const path = require('path')
+const uuid = require('node-uuid');
+const morgan = require('morgan');
 const passport = require('passport');
-const app = express();
+const flash = require('connect-flash');
+
+const fs = require('fs');
+const path = require('path');
+
 const routing = require('./app/routing');
 const security = require('./app/security');
-const uuid = require('node-uuid');
+
+const app = express();
 
 // create a write stream (in append mode)
 var accessLogStream = fs.createWriteStream(path.join(__dirname, '../logs/access.log'))
@@ -28,13 +32,21 @@ app.use(cookieParser());
 app.use(expressSession({secret: 'mySecretKey'}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 
 app.post('/login', security.login);
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/app-react/build/index.html'));
+})
 app.use('/api', security.auth);
 
-app.use(express.static('public'));
+app.use(express.static('public/common'));
+app.use(express.static('public/app-react/build'));
+
+
 
 app.use('/api', routing());
 

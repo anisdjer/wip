@@ -68,6 +68,6 @@ function requireLogin(req, res, next) {
 module.exports.auth = requireLogin;
 module.exports.login = passport.authenticate('login', {
     successRedirect: '/api/users',
-    failureRedirect: '/403.html',
+    failureRedirect: '/login',
     failureFlash : true 
   });
