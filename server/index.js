@@ -38,16 +38,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
 app.post('/login', security.login);
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/app-react/build/index.html'));
-})
 app.use('/api', security.auth);
 
-app.use(express.static('public/common'));
-app.use(express.static('public/app-react/build'));
-
-
-
 app.use('/api', routing());
+
+app.use('/static', express.static('public/app-react/build/static'));
+
+app.get('/*', security.auth, (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/app-react/build/index.html'));
+});
 
 app.listen(3000, () => console.log('Server running http://localhost:3000'));

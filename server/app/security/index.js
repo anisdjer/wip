@@ -57,7 +57,7 @@ function isValidPassword(user, password) {
   */
 
 function requireLogin(req, res, next) {
-  if (req.user) {
+  if (req.originalUrl === '/login' || req.user) {
     next(); // allow the next route to run
   } else {
     // require the user to log in
@@ -67,7 +67,7 @@ function requireLogin(req, res, next) {
 
 module.exports.auth = requireLogin;
 module.exports.login = passport.authenticate('login', {
-    successRedirect: '/api/users',
+    successRedirect: '/',
     failureRedirect: '/login',
     failureFlash : true 
   });
