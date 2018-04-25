@@ -9,8 +9,8 @@ import App from './App';
 ReactDOM.render(
     <Router>
         <div>
-            <Route path="/login" exact component={Login} />
-            <Route path="/" exact component={App} />
+            <Route path="/security/login" exact component={Login} />
+            <Route path="/admin/.*" component={App} />
         </div>
     </Router>,
    document.getElementById('root'));
